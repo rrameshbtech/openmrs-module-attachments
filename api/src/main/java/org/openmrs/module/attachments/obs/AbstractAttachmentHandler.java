@@ -8,6 +8,7 @@ import static org.openmrs.module.attachments.obs.ImageAttachmentHandler.THUMBNAI
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.io.InputStream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -208,6 +209,13 @@ public abstract class AbstractAttachmentHandler implements ComplexObsHandler {
 		
 		AttachmentComplexData complexData = getAttachmentComplexData(obs.getComplexData());
 		
+		try {
+			((InputStream) obs.getComplexData().getData()).reset();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		ValueComplex valueComplex = saveComplexData(obs, complexData);
 		obs.setValueComplex(valueComplex.getValueComplex());
 		return obs;
